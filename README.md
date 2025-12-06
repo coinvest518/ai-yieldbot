@@ -73,9 +73,9 @@ MISTRAL_MODEL=mistral-large-latest
 COMPOSIO_API_KEY=your_composio_api_key_here
 
 # Your Composio Account Info
-COMPOSIO_PROJECT_ID=pr_asakoILZk0P_
-COMPOSIO_ORG_ID=ok_ciHslaEbAI2t
-COMPOSIO_USER_ID=f7631f58-67ef-454c-bb39-984b3f271f2b
+COMPOSIO_PROJECT_ID
+COMPOSIO_ORG_ID=
+COMPOSIO_USER_ID
 
 # Twitter Connected Account from Composio Dashboard
 TWITTER_CONNECTED_ACCOUNT_ID=ca_Ka8OgruDXnxe
@@ -87,8 +87,7 @@ LANGCHAIN_PROJECT=ai-agent-ybot
 
 # Memory Backend ('memory' for dev, 'postgres' for production)
 MEMORY_BACKEND=memory
-# DATABASE_URL=postgresql://user:password@localhost:5432/ybot_memory
-```
+# DATABASE_URL=
 
 ## 🧠 Long-term Memory
 
