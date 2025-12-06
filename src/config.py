@@ -6,6 +6,13 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# SECURITY: prevent accidental Google provider initialization by clearing
+# common Google credential env vars if present. This avoids third-party
+# libraries probing Google ADC (Application Default Credentials) when
+# we explicitly intend to use Mistral.
+for _k in ("GOOGLE_API_KEY", "GOOGLE_APPLICATION_CREDENTIALS", "GOOGLE_CLOUD_PROJECT", "GOOGLE_OAUTH_ACCESS_TOKEN"):
+    os.environ.pop(_k, None)
+
 
 class Config:
     """Application configuration."""

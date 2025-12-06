@@ -7,6 +7,13 @@ the repository code periodically.
 """
 import sys
 
+import os
+
+# Ensure Google credential env vars are not present at runtime so
+# downstream libraries do not attempt to initialize Google providers.
+for _k in ("GOOGLE_API_KEY", "GOOGLE_APPLICATION_CREDENTIALS", "GOOGLE_CLOUD_PROJECT", "GOOGLE_OAUTH_ACCESS_TOKEN"):
+    os.environ.pop(_k, None)
+
 from src.config import config
 from src.agent import create_twitter_agent, run_autonomous_post
 
