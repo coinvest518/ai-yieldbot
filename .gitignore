@@ -51,7 +51,7 @@ logs/
 daily_research_*.json
 last_tweet_cache.json
 pending_tweet_*.json
-.env.*
+.env*
 .DS_Store
 Thumbs.db
 # Prevent accidentally committing prompt files that may contain secrets
