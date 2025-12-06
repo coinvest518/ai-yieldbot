@@ -216,12 +216,59 @@ Install the postgres dependency:
 pip install psycopg2-binary
 ```
 
-## 📊 LangSmith Tracing
+## 🚀 Deployment
 
-1. Sign up at [smith.langchain.com](https://smith.langchain.com)
-2. Add your API key to `.env`
-3. Set `LANGCHAIN_TRACING_V2=true`
+### Railway (Recommended)
 
-## 📝 License
+1. **Connect Repository:**
+   - Create new Railway project
+   - Connect to your GitHub repository
+
+2. **Environment Variables:**
+   ```env
+   MISTRAL_API_KEY=your_mistral_key
+   COMPOSIO_API_KEY=your_composio_key
+   TWITTER_CONNECTED_ACCOUNT_ID=your_twitter_account_id
+   LINKEDIN_CONNECTED_ACCOUNT_ID=your_linkedin_account_id
+   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+   FIRECRAWL_API_KEY=your_firecrawl_key
+   MEMORY_BACKEND=memory
+   ```
+
+3. **Scheduled Jobs:**
+   - Create a scheduled job in Railway dashboard
+   - Command: `python scheduler.py`
+   - Schedule: `*/90 * * * *` (every 90 minutes to respect LinkedIn rate limits)
+   - Note: LinkedIn has strict daily rate limits that reset at midnight UTC
+
+### Local Testing
+
+```bash
+# Run once
+python scheduler.py
+
+# Run test suite
+python test_social.py
+```
+
+## 🔧 Rate Limits & Optimization
+
+### LinkedIn API Limits
+- **Daily limits** reset at midnight UTC
+- **Application + Member limits** apply
+- **Profile caching** implemented (24-hour cache)
+- **429 errors** when limits exceeded
+- **Best practice**: Space requests evenly throughout the day
+
+### Twitter API Limits
+- **300 posts per 3 hours** for new accounts
+- **Unique content required** (duplicate detection)
+- **Media uploads** count toward limits
+
+### Optimization Features
+- **Profile caching** avoids unnecessary LinkedIn API calls
+- **Content uniqueness** enforced with timestamps
+- **Regulated scraping** with daily cache
+- **Error handling** with automatic retries
 
 MIT License

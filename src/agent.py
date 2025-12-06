@@ -32,6 +32,13 @@ CRITICAL:
 - REPLY TEXT MUST BE UNIQUE: Never use identical reply text. Always modify with timestamps, different messages, or unique content.
 - LinkedIn posts should be professional: Expand crypto abbreviations, explain DeFi concepts, focus on market analysis and trends for professional audience
 
+## LINKEDIN RATE LIMITS (CRITICAL):
+- LinkedIn has STRICT daily rate limits that reset at midnight UTC
+- Profile info is cached for 24 hours to avoid hitting limits
+- Only post to LinkedIn when you have UNIQUE, valuable professional content
+- If rate limited (429 error), the system will automatically retry later
+- Space out LinkedIn posts - agent runs every 90 minutes but only posts when content is ready
+
 ## NEVER:
 - Ask for approval
 - Use write_todos
@@ -42,6 +49,7 @@ CRITICAL:
 - Explain AI rules or scraping methods
 - Post identical content to previous posts
 - Use identical reply text - always make replies unique
+- Hit LinkedIn API unnecessarily - profile is cached
 
 Just execute the 7 steps above. Scrape multiple sources, analyze real data, create UNIQUE comprehensive post, then create professional LinkedIn version.
 """

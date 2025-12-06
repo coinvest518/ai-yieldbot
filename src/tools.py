@@ -361,6 +361,59 @@ def get_linkedin_tools(user_id: Optional[str] = None) -> List[BaseTool]:
     """Get LinkedIn tools using Composio API with connected account."""
     from langchain_core.tools import tool
 
+    # Cache file for LinkedIn profile to avoid rate limits
+    LINKEDIN_PROFILE_CACHE = "linkedin_profile_cache.json"
+    
+    def get_cached_linkedin_profile():
+        """Get cached LinkedIn profile or fetch new one if needed."""
+        try:
+            if os.path.exists(LINKEDIN_PROFILE_CACHE):
+                with open(LINKEDIN_PROFILE_CACHE, 'r') as f:
+                    cache_data = json.load(f)
+                
+                # Check if cache is less than 24 hours old
+                cache_time = cache_data.get('cached_at', 0)
+                if time.time() - cache_time < 86400:  # 24 hours
+                    print(f"[LINKEDIN] Using cached profile (age: {int(time.time() - cache_time)}s)")
+                    return cache_data['profile']
+            
+            print(f"[LINKEDIN] Fetching fresh profile info...")
+            
+            # Fetch fresh profile
+            url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_GET_MY_INFO"
+            headers = {
+                "x-api-key": config.COMPOSIO_API_KEY,
+                "Content-Type": "application/json"
+            }
+
+            payload = {
+                "connected_account_id": config.LINKEDIN_CONNECTED_ACCOUNT_ID,
+                "user_id": config.COMPOSIO_USER_ID,
+                "name": "LINKEDIN_GET_MY_INFO",
+                "arguments": {}
+            }
+
+            response = requests.post(url, json=payload, headers=headers, timeout=30)
+            result = response.json()
+            
+            if result.get('successful'):
+                # Cache the profile
+                cache_data = {
+                    'cached_at': time.time(),
+                    'profile': result
+                }
+                with open(LINKEDIN_PROFILE_CACHE, 'w') as f:
+                    json.dump(cache_data, f)
+                print(f"[LINKEDIN] Cached fresh profile")
+                return result
+            else:
+                print(f"[LINKEDIN] Failed to fetch profile: {result}")
+                return None
+                
+        except Exception as e:
+            print(f"[LINKEDIN] Error with profile cache: {e}")
+            return None
+
     @tool
     def linkedin_get_my_info() -> dict:
         """Get LinkedIn user profile information including author_id for posting."""
@@ -393,35 +446,16 @@ def get_linkedin_tools(user_id: Optional[str] = None) -> List[BaseTool]:
         """Create a professional LinkedIn post."""
         print(f"\n[LINKEDIN] Creating post: {commentary[:100]}...")
 
-        # First get author URN by fetching profile info directly
-        profile_url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_GET_MY_INFO"
-        headers = {
-            "x-api-key": config.COMPOSIO_API_KEY,
-            "Content-Type": "application/json"
-        }
-
-        profile_payload = {
-            "connected_account_id": config.LINKEDIN_CONNECTED_ACCOUNT_ID,
-            "user_id": config.COMPOSIO_USER_ID,
-            "name": "LINKEDIN_GET_MY_INFO",
-            "arguments": {}
-        }
-
+        # Get cached author URN (refreshes every 24 hours to avoid rate limits)
+        profile_info = get_cached_linkedin_profile()
         author_urn = None
-        try:
-            profile_response = requests.post(profile_url, json=profile_payload, headers=headers, timeout=30)
-            profile_result = profile_response.json()
-            print(f"[LINKEDIN] Profile Response: {profile_result}")
-            
-            if profile_result.get('successful'):
-                data = profile_result.get('data', {})
-                if isinstance(data, dict):
-                    author_urn = data.get('id') or (data.get('data') or {}).get('id')
-        except Exception as e:
-            print(f"[LINKEDIN] Failed to get profile for author URN: {e}")
+        if profile_info:
+            data = profile_info.get('data', {})
+            if isinstance(data, dict):
+                author_urn = data.get('id') or (data.get('data') or {}).get('id')
 
         if not author_urn:
-            return {"error": "Could not get LinkedIn author URN from profile"}
+            return {"error": "Could not get LinkedIn author URN from cached profile"}
 
         url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_CREATE_LINKED_IN_POST"
         headers = {
