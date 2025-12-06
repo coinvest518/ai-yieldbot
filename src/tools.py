@@ -603,7 +603,7 @@ def get_firecrawl_tools() -> List[BaseTool]:
         while attempt <= max_retries:
             try:
                 if maxAge is not None:
-                    return fc.scrape(url, formats=formats, maxAge=maxAge)
+                    return fc.scrape(url, formats=formats, max_age=maxAge)
                 return fc.scrape(url, formats=formats)
             except Exception as e:
                 err = str(e)
