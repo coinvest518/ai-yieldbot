@@ -393,16 +393,32 @@ def get_linkedin_tools(user_id: Optional[str] = None) -> List[BaseTool]:
         """Create a professional LinkedIn post."""
         print(f"\n[LINKEDIN] Creating post: {commentary[:100]}...")
 
-        # First get author URN
-        profile_info = linkedin_get_my_info()
+        # First get author URN by fetching profile info directly
+        profile_url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_GET_MY_INFO"
+        headers = {
+            "x-api-key": config.COMPOSIO_API_KEY,
+            "Content-Type": "application/json"
+        }
+
+        profile_payload = {
+            "connected_account_id": config.LINKEDIN_CONNECTED_ACCOUNT_ID,
+            "user_id": config.COMPOSIO_USER_ID,
+            "name": "LINKEDIN_GET_MY_INFO",
+            "arguments": {}
+        }
+
         author_urn = None
         try:
-            if profile_info.get('successful'):
-                data = profile_info.get('data', {})
+            profile_response = requests.post(profile_url, json=profile_payload, headers=headers, timeout=30)
+            profile_result = profile_response.json()
+            print(f"[LINKEDIN] Profile Response: {profile_result}")
+            
+            if profile_result.get('successful'):
+                data = profile_result.get('data', {})
                 if isinstance(data, dict):
                     author_urn = data.get('id') or (data.get('data') or {}).get('id')
         except Exception as e:
-            print(f"[LINKEDIN] Failed to extract author URN: {e}")
+            print(f"[LINKEDIN] Failed to get profile for author URN: {e}")
 
         if not author_urn:
             return {"error": "Could not get LinkedIn author URN from profile"}
