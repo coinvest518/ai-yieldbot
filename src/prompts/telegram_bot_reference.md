@@ -9,7 +9,7 @@
 > WARNING: A Telegram Bot Token was previously committed to this file. That secret has been removed from this file in the current commit. If this token is still active, revoke it immediately and create a new token. Store bot tokens in a local `.env` file and never commit them to git. See the repository README or follow the steps below to purge the secret from history and rotate credentials.
 
 ## Composio Integration
-**Connected Account ID:** ca_ZPVfCDk6sSxt  
+**Connected Account ID:** [REDACTED - See .env file]  
 **Toolkit:** TELEGRAM  
 
 ## Bot Commands

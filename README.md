@@ -78,7 +78,7 @@ COMPOSIO_ORG_ID=
 COMPOSIO_USER_ID
 
 # Twitter Connected Account from Composio Dashboard
-TWITTER_CONNECTED_ACCOUNT_ID=ca_Ka8OgruDXnxe
+TWITTER_CONNECTED_ACCOUNT_ID=ca__qCCy0ttpxeh
 
 # Optional - LangSmith Tracing
 LANGCHAIN_API_KEY=your_langsmith_api_key_here

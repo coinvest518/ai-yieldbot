@@ -39,7 +39,7 @@ Use EXACT slugs as shown in Composio dashboard:
 - `TWITTER_MEDIA_UPLOAD_MEDIA` - Upload media
 - `TWITTER_USER_LOOKUP_ME` - Get user info
 
-Connected Account ID: `ca_Ka8OgruDXnxe`
+Connected Account ID: `ca__qCCy0ttpxeh`
 
 ## Development Guidelines
 - Use Python 3.11+ (required by deepagents)
