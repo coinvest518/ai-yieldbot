@@ -1,0 +1,30 @@
+# Deep Agents - the main framework (latest stable version Dec 2025)
+deepagents==0.2.8
+
+# LangChain ecosystem (latest stable versions as of Dec 2025)
+langchain==1.1.2
+langchain-core
+langgraph==1.0.4
+
+# Mistral AI integration
+langchain-mistralai==1.1.0
+mistralai>=1.9.0
+
+# Firecrawl (for DeFi/crypto research)
+firecrawl-py
+
+# BeautifulSoup for web scraping
+beautifulsoup4
+
+# LangSmith for tracing and observability
+langsmith==0.4.53
+
+# Composio for tool integrations (Twitter, image generation, etc.)
+composio-langchain==0.9.4
+
+# Environment management
+python-dotenv==1.1.1
+
+# Utilities
+pydantic>=2.0.0
+httpx>=0.25.0
