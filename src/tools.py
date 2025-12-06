@@ -357,6 +357,92 @@ def get_telegram_tools(user_id: Optional[str] = None) -> List[BaseTool]:
     return tools
 
 
+def get_linkedin_tools(user_id: Optional[str] = None) -> List[BaseTool]:
+    """Get LinkedIn tools using Composio API with connected account."""
+    from langchain_core.tools import tool
+
+    @tool
+    def linkedin_get_my_info() -> dict:
+        """Get LinkedIn user profile information including author_id for posting."""
+        print(f"\n[LINKEDIN] Getting user profile info")
+
+        url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_GET_MY_INFO"
+        headers = {
+            "x-api-key": config.COMPOSIO_API_KEY,
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "connected_account_id": config.LINKEDIN_CONNECTED_ACCOUNT_ID,
+            "user_id": config.COMPOSIO_USER_ID,
+            "name": "LINKEDIN_GET_MY_INFO",
+            "arguments": {}
+        }
+
+        try:
+            response = requests.post(url, json=payload, headers=headers, timeout=30)
+            result = response.json()
+            print(f"[LINKEDIN] Profile Response: {result}")
+            return result
+        except Exception as e:
+            print(f"[LINKEDIN] Error getting profile: {e}")
+            return {"error": str(e)}
+
+    @tool
+    def linkedin_create_post(commentary: str, visibility: str = "PUBLIC") -> dict:
+        """Create a professional LinkedIn post."""
+        print(f"\n[LINKEDIN] Creating post: {commentary[:100]}...")
+
+        # First get author URN
+        profile_info = linkedin_get_my_info()
+        author_urn = None
+        try:
+            if profile_info.get('successful'):
+                data = profile_info.get('data', {})
+                if isinstance(data, dict):
+                    author_urn = data.get('id') or (data.get('data') or {}).get('id')
+        except Exception as e:
+            print(f"[LINKEDIN] Failed to extract author URN: {e}")
+
+        if not author_urn:
+            return {"error": "Could not get LinkedIn author URN from profile"}
+
+        url = "https://backend.composio.dev/api/v3/tools/execute/LINKEDIN_CREATE_LINKED_IN_POST"
+        headers = {
+            "x-api-key": config.COMPOSIO_API_KEY,
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "connected_account_id": config.LINKEDIN_CONNECTED_ACCOUNT_ID,
+            "user_id": config.COMPOSIO_USER_ID,
+            "name": "LINKEDIN_CREATE_LINKED_IN_POST",
+            "arguments": {
+                "author": author_urn,
+                "commentary": commentary,
+                "visibility": visibility,
+                "lifecycleState": "PUBLISHED",
+                "feedDistribution": "MAIN_FEED",
+                "isReshareDisabledByAuthor": False
+            }
+        }
+
+        try:
+            response = requests.post(url, json=payload, headers=headers, timeout=30)
+            result = response.json()
+            print(f"[LINKEDIN] Post Response: {result}")
+            return result
+        except Exception as e:
+            print(f"[LINKEDIN] Error creating post: {e}")
+            return {"error": str(e)}
+
+    tools = [linkedin_get_my_info, linkedin_create_post]
+    print(f"Loaded {len(tools)} LinkedIn tools (Composio v3 API)")
+    print(f"   User ID: {config.COMPOSIO_USER_ID}")
+    print(f"   Connected Account: {config.LINKEDIN_CONNECTED_ACCOUNT_ID}")
+    return tools
+
+
 def get_image_generation_tools() -> List[BaseTool]:
     """Get image generation tools using Pollinations AI - NFT/Crypto themed."""
     from langchain_core.tools import tool
@@ -741,6 +827,7 @@ def get_all_tools(user_id: Optional[str] = None) -> List[BaseTool]:
     
     all_tools.extend(get_twitter_tools(user_id))
     all_tools.extend(get_telegram_tools(user_id))
+    all_tools.extend(get_linkedin_tools(user_id))
     all_tools.extend(get_image_generation_tools())
     all_tools.extend(get_firecrawl_tools())
     all_tools.extend(get_analytics_tools())

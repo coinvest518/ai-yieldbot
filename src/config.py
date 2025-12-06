@@ -41,6 +41,9 @@ class Config:
     # Twitter Connected Account (from Composio)
     TWITTER_CONNECTED_ACCOUNT_ID: str = os.getenv("TWITTER_CONNECTED_ACCOUNT_ID", "ca__qCCy0ttpxeh")
     
+    # LinkedIn Connected Account (from Composio)
+    LINKEDIN_CONNECTED_ACCOUNT_ID: str = os.getenv("LINKEDIN_CONNECTED_ACCOUNT_ID", "ca_vS8wTlXWFRUh")
+    
     # Telegram Bot Configuration
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CONNECTED_ACCOUNT_ID: str = os.getenv("TELEGRAM_CONNECTED_ACCOUNT_ID", "ca_ZPVfCDk6sSxt")
