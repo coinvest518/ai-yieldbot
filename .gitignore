@@ -54,3 +54,6 @@ pending_tweet_*.json
 .env.*
 .DS_Store
 Thumbs.db
+# Prevent accidentally committing prompt files that may contain secrets
+src/prompts/telegram_bot_reference.md
+src/prompts/*_reference.md
