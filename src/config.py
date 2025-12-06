@@ -36,10 +36,10 @@ class Config:
     COMPOSIO_API_KEY: str = os.getenv("COMPOSIO_API_KEY", "")
     COMPOSIO_PROJECT_ID: str = os.getenv("COMPOSIO_PROJECT_ID", "pr_asakoILZk0P_")
     COMPOSIO_ORG_ID: str = os.getenv("COMPOSIO_ORG_ID", "ok_ciHslaEbAI2t")
-    COMPOSIO_USER_ID: str = os.getenv("COMPOSIO_USER_ID", "f7631f58-67ef-454c-bb39-984b3f271f2b")
+    COMPOSIO_USER_ID: str = os.getenv("COMPOSIO_USER_ID", "pg-test-f7631f58-67ef-454c-bb39-984b3f271f2b")
     
     # Twitter Connected Account (from Composio)
-    TWITTER_CONNECTED_ACCOUNT_ID: str = os.getenv("TWITTER_CONNECTED_ACCOUNT_ID", "ca_Ka8OgruDXnxe")
+    TWITTER_CONNECTED_ACCOUNT_ID: str = os.getenv("TWITTER_CONNECTED_ACCOUNT_ID", "ca__qCCy0ttpxeh")
     
     # Telegram Bot Configuration
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
