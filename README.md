@@ -246,11 +246,11 @@ pip install psycopg2-binary
 # Run continuous scheduler (runs every 90 minutes)
 python scheduler.py
 
+# Check agent status and last run results
+python check_status.py
+
 # Run single test
 python -c "from src.agent import create_twitter_agent, run_autonomous_post; agent = create_twitter_agent(); run_autonomous_post(agent)"
-
-# Check status
-python -c "from scheduler import get_status; import json; print(json.dumps(get_status(), indent=2))"
 ```
 
 ## 🔧 Rate Limits & Optimization
