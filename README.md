@@ -235,20 +235,22 @@ pip install psycopg2-binary
    MEMORY_BACKEND=memory
    ```
 
-3. **Scheduled Jobs:**
-   - Create a scheduled job in Railway dashboard
-   - Command: `python scheduler.py`
-   - Schedule: `*/90 * * * *` (every 90 minutes to respect LinkedIn rate limits)
-   - Note: LinkedIn has strict daily rate limits that reset at midnight UTC
+3. **Service Configuration:**
+   - Railway will automatically use the `Procfile` to start the continuous scheduler
+   - The scheduler runs every 90 minutes internally (respects LinkedIn rate limits)
+   - No external cron jobs needed - the app manages its own scheduling
 
-### Local Testing
+### Local Development
 
 ```bash
-# Run once
+# Run continuous scheduler (runs every 90 minutes)
 python scheduler.py
 
-# Run test suite
-python test_social.py
+# Run single test
+python -c "from src.agent import create_twitter_agent, run_autonomous_post; agent = create_twitter_agent(); run_autonomous_post(agent)"
+
+# Check status
+python -c "from scheduler import get_status; import json; print(json.dumps(get_status(), indent=2))"
 ```
 
 ## 🔧 Rate Limits & Optimization
